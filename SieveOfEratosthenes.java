@@ -4,17 +4,26 @@ import java.util.Arrays;
 public class SieveOfEratosthenes{
 	public static void main(String[] args){
 		if(args.length == 0){
-			System.out.println("Sieve of Eratosthenes\nRandomized number of primes (From 5-500):\n");
-			int rand = (int)(Math.random() * 500) + 5;
+			System.out.println("Sieve of Eratosthenes\n\nRandomized number of primes (From 5-500):\n");
+
+			int rand = (int)(Math.random() * 538) + 2;
 			sieve(rand);
-			System.out.println("For more info. on how to use this, enter `java SieveOfEratosthenes help`");
+
+			System.out.println("\nFor more info. on how to use this, enter `java SieveOfEratosthenes help`");
 		}else if(args[0].toUpperCase().equals("HELP")){
-			System.out.println("Sieve of Eratosthenes\n\nTo find the prime numbers within 2-n simply enter `java SieveOfEratosthenes n`\nOtherwise, it will randomly choose a number to find the prime numbers within the range of 5-500.");
+			System.out.println("Sieve of Eratosthenes\n\nTo find the prime numbers within 2-n simply enter `java SieveOfEratosthenes n`\nOtherwise, it will randomly choose a number to find the prime numbers within the range of 5-538.");
 		}else{
 			try{
-				sieve(Integer.parseInt(args[0]));
+				if(Integer.parseInt(args[0]) < 2){
+					System.out.println("Too small.");
+					System.exit(0);
+				}else{
+					System.out.println("Sieve of Eratosthenes\n\n");
+					sieve(Integer.parseInt(args[0]));
+				}
 			}catch(Exception e){
-				System.out.println("Not integer or too many inputs.");
+				System.out.println("Not an integer, too many inputs, or n > 538.");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -24,30 +33,76 @@ public class SieveOfEratosthenes{
 		ArrayList<Integer> primes = new ArrayList<Integer>();
 		ArrayList<Integer> numbers = new ArrayList<Integer>();
 		ArrayList<Integer> result = new ArrayList<Integer>();
+		long startTime, endTime, totalTime;
 
-		System.out.println("For a given positiove integer n, output the first n primes:");
-		result = recursion(primes, 2, num);
+		try{
+////		XXX RECURSIVE METHODS
+			System.out.println("RECURSIVE METHODS\nFor a given positiove integer n, output the first n primes:");
+			startTime = System.nanoTime();
+			result = recursion(primes, 2, num);
+			endTime = System.nanoTime();
+			totalTime = endTime - startTime;
 
-		System.out.print("e.g. n = " + num + "\nOutput: ");
-		primes.forEach(elem -> System.out.print(elem + " "));
-		System.out.println("\n\n\n");
+			System.out.print("e.g. n = " + num + "\nOutput: ");
+			primes.forEach(elem -> System.out.print(elem + " "));
+			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
 
-		//Populate the numbers and primes array from 2 to num.
-		System.out.println("For a given integer n > 1, list all the primes not exceeding n:");
-		for(int i = 2; i <= num; i++){
-			//System.out.print(i + " ");
-			numbers.add(i);
+
+
+			//Populate the numbers and primes array from 2 to num.
+			System.out.println("For a given integer n > 1, list all the primes not exceeding n:");
+			for(int i = 2; i <= num; i++){
+				numbers.add(i);
+			}
+			primes = new ArrayList<Integer>(numbers);
+
+			startTime = System.nanoTime();
+			result = recursion2(primes, numbers, 0);
+			endTime = System.nanoTime();
+			totalTime = endTime - startTime;
+
+			System.out.print("e.g. n = " + num + "\nOutput: ");
+			result.forEach(elem -> System.out.print(elem + " "));
+			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		primes.clear(); //Remove past primes in the ArrayList.
-		primes = new ArrayList<Integer>(numbers);
-		//System.out.println();
 
-		result = recursion2(primes, numbers, 0);
 
-		//System.out.print("\nPrimes: ");
-		System.out.print("e.g. n = " + num + "\nOutput: ");
-		result.forEach(elem -> System.out.print(elem + " "));
-		System.out.println();
+
+
+		try{
+////		XXX Iterative methods.
+			System.out.println("ITERATIVE METHODS\nFor a given positiove integer n, output the first n primes:");
+
+			startTime = System.nanoTime();
+			result = iterative1(num);
+			endTime = System.nanoTime();
+			totalTime = endTime - startTime;
+
+			System.out.print("e.g. n = " + num + "\nOutput: ");
+			result.forEach(elem -> System.out.print(elem + " "));
+			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n");
+
+
+
+			System.out.println("For a given integer n > 1, list all the primes not exceeding n:");
+			numbers.clear();
+			for(int i = 2; i <= num; i++){
+				numbers.add(i);
+			}
+
+			startTime = System.nanoTime();
+			result = iteration2(numbers);
+			endTime = System.nanoTime();
+			totalTime = endTime - startTime;
+
+			System.out.print("e.g. n = " + num + "\nOutput: ");
+			result.forEach(elem -> System.out.print(elem + " "));
+			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public static ArrayList<Integer> recursion(ArrayList<Integer> primes, int prime, int size){
@@ -85,5 +140,44 @@ public class SieveOfEratosthenes{
 			// array.
 			return recursion2(primes, primes, ++index);
 		}
+	}
+
+	public static ArrayList<Integer> iterative1(int num){
+		ArrayList<Integer> primes = new ArrayList<Integer>();
+
+		for(int i = 2; primes.size() < num; i++){
+			boolean isPrime = true;
+			int possiblePrime = i;
+
+			for(int j = 2; j < i; j++){
+				if(i % j == 0){
+					isPrime = false;
+					continue;
+				}
+			}
+
+			if(isPrime) primes.add(possiblePrime);
+		}
+
+		return primes;
+	}
+
+	public static ArrayList<Integer> iteration2(ArrayList<Integer> numbers){
+		ArrayList<Integer> primes = new ArrayList<Integer>();
+
+		for(int i = 2; i < numbers.get(numbers.size() - 1); i++){
+			boolean isPrime = true;
+
+			for(int j = 2; j < numbers.get(numbers.size() - 1); j++){
+				if(i % j == 0 && i != j){
+					isPrime = false;
+					break;
+				}
+			}
+
+			if(isPrime) primes.add(i);
+		}
+
+		return primes;
 	}
 }
