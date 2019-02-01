@@ -36,7 +36,7 @@ public class SieveOfEratosthenes{
 		long startTime, endTime, totalTime;
 
 		try{
-////		XXX RECURSIVE METHODS
+////		XXX RECURSIVE METHODS.
 			System.out.println("RECURSIVE METHODS\nFor a given positiove integer n, output the first n primes:");
 			startTime = System.nanoTime();
 			result = recursion(primes, 2, num);
@@ -45,7 +45,7 @@ public class SieveOfEratosthenes{
 
 			System.out.print("e.g. n = " + num + "\nOutput: ");
 			primes.forEach(elem -> System.out.print(elem + " "));
-			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
+			System.out.println("\n\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
 
 
 
@@ -63,7 +63,7 @@ public class SieveOfEratosthenes{
 
 			System.out.print("e.g. n = " + num + "\nOutput: ");
 			result.forEach(elem -> System.out.print(elem + " "));
-			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
+			System.out.println("\n\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -72,17 +72,17 @@ public class SieveOfEratosthenes{
 
 
 		try{
-////		XXX Iterative methods.
+////		XXX ITERATIVE METHODS.
 			System.out.println("ITERATIVE METHODS\nFor a given positiove integer n, output the first n primes:");
 
 			startTime = System.nanoTime();
-			result = iterative1(num);
+			result = iteration1(num);
 			endTime = System.nanoTime();
 			totalTime = endTime - startTime;
 
 			System.out.print("e.g. n = " + num + "\nOutput: ");
 			result.forEach(elem -> System.out.print(elem + " "));
-			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n");
+			System.out.println("\n\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n");
 
 
 
@@ -99,7 +99,7 @@ public class SieveOfEratosthenes{
 
 			System.out.print("e.g. n = " + num + "\nOutput: ");
 			result.forEach(elem -> System.out.print(elem + " "));
-			System.out.println("\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.\n\n\n");
+			System.out.println("\n\nExecution time: " + (totalTime / Math.pow(10, 9)) + " seconds.");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -142,7 +142,7 @@ public class SieveOfEratosthenes{
 		}
 	}
 
-	public static ArrayList<Integer> iterative1(int num){
+	public static ArrayList<Integer> iteration1(int num){
 		ArrayList<Integer> primes = new ArrayList<Integer>();
 
 		for(int i = 2; primes.size() < num; i++){
